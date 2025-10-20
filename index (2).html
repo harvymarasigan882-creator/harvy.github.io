@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monthsary 💖</title>
+<style>
+  body {
+    margin: 0;
+    font-family: "Comic Sans MS", cursive;
+    background-color: #ffe6f2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  h1, h2 {
+    color: #ff4da6;
+    margin: 10px 0;
+  }
+
+  h2 { color: #ff66b2; }
+
+  .btn {
+    background-color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ff4da6;
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+
+  .btn:hover { transform: scale(1.1); }
+
+  #page2, #page3 {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+  }
+
+  /* Page 2 */
+  #page2 {
+    background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+    animation: fadeIn 1s ease forwards;
+  }
+
+  .heart {
+    width: 120px;
+    height: 120px;
+    background-color: #ff4da6;
+    position: relative;
+    transform: rotate(-45deg);
+    animation: heartbeat 1s infinite;
+  }
+
+  .heart::before, .heart::after {
+    content: "";
+    width: 120px;
+    height: 120px;
+    background-color: #ff4da6;
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  .heart::before { top: -60px; left: 0; }
+  .heart::after { left: 60px; top: 0; }
+
+  @keyframes heartbeat {
+    0%, 50%, 100% { transform: scale(1) rotate(-45deg); }
+    25%, 75% { transform: scale(1.2) rotate(-45deg); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .message {
+    color: #fff;
+    font-size: 1.8em;
+    margin-top: 20px;
+    animation: fadeIn 2s ease;
+  }
+
+  /* Page 3 */
+  #page3 {
+    background: linear-gradient(135deg, #ffb6c1, #ff4da6);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Letter box - centered with animation */
+  .letter {
+    display: none; 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8); /* start smaller */
+    width: 80%;
+    max-width: 700px;
+    min-height: 300px;
+    height: auto;
+    background-color: #fffafc;
+    border: 2px solid #ff4da6;
+    border-radius: 15px;
+    padding: 40px 30px;
+    overflow-y: auto;
+    opacity: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 1s ease; /* smooth animation */
+  }
+
+  .letter.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1); /* fade + scale up */
+  }
+
+  /* Message inside letter */
+  .love-message {
+    font-family: Arial, sans-serif;
+    font-size: 1.2em;
+    line-height: 1.6;
+    color: #ff4da6;
+    white-space: pre-wrap;
+    text-align: center;
+  }
+
+  /* Floating hearts */
+  .floating-heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #ff4da6;
+    transform: rotate(-45deg);
+    animation: floatUp 5s infinite ease-in;
+  }
+
+  .floating-heart::before, .floating-heart::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background-color: #ff4da6;
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  .floating-heart::before { top: -10px; left: 0; }
+  .floating-heart::after { left: 10px; top: 0; }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1) rotate(-45deg); opacity: 1; }
+    100% { transform: translateY(-600px) scale(1.5) rotate(-45deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div id="page1">
+  <h1>Hi my love!</h1>
+  <h2>READY FOR A SURPRISE?</h2>
+  <button class="btn" id="yesBtn">SURE!</button>
+  <button class="btn" id="noBtn">NAH</button>
+</div>
+
+<!-- PAGE 2 -->
+<div id="page2">
+  <div class="heart"></div>
+  <h2 class="message">YAAAY! I HOPE YOU'LL LIKE IT 💕</h2>
+  <button class="btn" id="nextBtn">Open Letter 💌</button>
+</div>
+
+<!-- PAGE 3 -->
+<div id="page3">
+  <div class="letter">
+    <div id="typed-message" class="love-message"></div>
+  </div>
+</div>
+
+<script>
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const page1 = document.getElementById('page1');
+const page2 = document.getElementById('page2');
+const page3 = document.getElementById('page3');
+const nextBtn = document.getElementById('nextBtn');
+let yesSize = 1, noSize = 1, clickCount = 0;
+
+// Full monthsary message
+const message = `Good morning babyyy, happy 3rd monthsary po
+I'm so happy and thankful that we're still here loving each other, after ng mga bagay na nangyayari satin i want to say that iloveyou always thankyou for staying, loving and caring me sana kahit may mga problems and misunderstanding ay wag tayo susuko baby breaking up is not solution maiintindihan ko if want mo ng space. Wla nakong ibang gusto mahalin ikaw lang baby.I hope you realize that I don't want you to loose again . I hope we can put aside our pride and ego when it come to argument na para mas madali natin ma ayos, let your unsaid thoughts go out and tell me I'll listen and understand it. 
+i wish that na kahit malabo dito padin tayo Hanggang sa mag kasama na
+I'm so proud of you baby even sa mga small achievements mo galing galing mo palagi, don't be to hard to yourself okay? don't skip meals kain ka palagi wag papabayaan sa sarili baby.  Remeber that I'm always here for you i really love you and i mean it happy monthsary again baby iloveyou`;
+
+// Typing effect
+function typeMessage(element, text, speed=20){
+    let i = 0;
+    element.textContent = "";
+    const interval = setInterval(()=>{
+        element.textContent += text.charAt(i);
+        i++;
+        if(i>=text.length) clearInterval(interval);
+    }, speed);
+}
+
+// Button events
+noBtn.addEventListener('click', ()=>{
+    clickCount++;
+    yesSize += 0.3;
+    noSize -= 0.3;
+    yesBtn.style.transform = `scale(${yesSize})`;
+    noBtn.style.transform = `scale(${noSize})`;
+    noBtn.style.opacity = 1 - (clickCount*0.3);
+    if(clickCount>=3) noBtn.style.display='none';
+});
+
+yesBtn.addEventListener('click', ()=>{
+    page1.style.display='none';
+    page2.style.display='flex';
+});
+
+nextBtn.addEventListener('click', ()=>{
+    page2.style.display='none';
+    page3.style.display='flex';
+    const letter = document.querySelector('.letter');
+    const typedElement = document.getElementById('typed-message');
+
+    // Show letter with animation
+    letter.style.display = 'flex';
+    setTimeout(()=>{
+        letter.classList.add('show');
+        typeMessage(typedElement, message);
+        createHearts();
+    }, 100);
+});
+
+function createHearts(){
+    for(let i=0;i<30;i++){
+        const heart=document.createElement('div');
+        heart.classList.add('floating-heart');
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.animationDuration=3+Math.random()*4+"s";
+        document.body.appendChild(heart);
+        setTimeout(()=>{heart.remove();},7000);
+    }
+}
+</script>
+
+</body>
+</html>
